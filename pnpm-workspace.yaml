@@ -1,0 +1,3 @@
+storeDir: ~/.pnpm-store
+verifyDepsBeforeRun: false
+confirmModulesPurge: false
