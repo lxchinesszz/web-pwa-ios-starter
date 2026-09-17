@@ -2,26 +2,77 @@
 
 本文档供开发者和 AI Agent 使用。每个应用必须位于自己的独立目录中，并在该目录内完成初始化。不要在一个应用目录中生成另一个应用。
 
-## 创建流程
+## 两种创建方式
 
-1. 将本模板复制到新应用目录，复制时排除 `.git/`、`node_modules/`、`.pnpm-store/`、`dist/` 和编辑器临时文件。
-2. 进入新应用目录。
-3. 运行初始化命令：
+| 方式 | 模板来源 | 执行范围 | 适用情况 |
+| --- | --- | --- | --- |
+| `node scripts/init-app.mjs` | 已复制到新目录的本地模板 | 只写入应用配置和版本 | 需要使用本地尚未推送的模板，或想逐步控制安装与构建 |
+| `create-pwa-app` | GitHub 上的模板仓库 | 下载、初始化、安装依赖、生成图标、lint、build | 想从远端模板一次创建可运行的应用 |
 
-   ```bash
-   node scripts/init-app.mjs \
-     --name "旅行规划助手" \
-     --short-name "旅行助手" \
-     --slug "trip-planner" \
-     --description "使用 AI 快速生成旅行计划" \
-     --theme-color "#863bff"
-   ```
+两种方式都在**独立的新目录**中生成应用。不要在现有应用目录中再创建应用。两者都不会自动部署，也不会替你编写应用页面或设计正式图标。
 
-4. 运行 `pnpm install`。模板通过 `pnpm-workspace.yaml` 将依赖存储在 `~/.pnpm-store`，所有应用共享，不会重新下载或保存相同包的完整副本。
-5. 替换 `public/favicon.svg`，再运行 `pnpm generate:pwa-assets`。
-6. 根据需求修改 `src/App.tsx` 及相关组件。应用元数据统一从根目录 `app.config.ts` 读取。
-7. 运行 `pnpm lint && pnpm build`。
-8. 本地确认后，由用户明确要求时再运行 `pnpm deploy`。
+## 方式一：复制本地模板后初始化
+
+在应用目录之外，将本地模板复制到新目录。将 `/path/to/web-pwa-starter` 换成你的模板仓库路径：
+
+```bash
+rsync -a \
+  --exclude='.git/' \
+  --exclude='node_modules/' \
+  --exclude='.pnpm-store/' \
+  --exclude='dist/' \
+  --exclude='.DS_Store' \
+  /path/to/web-pwa-starter/ ./trip-planner/
+cd trip-planner
+```
+
+在新目录运行初始化脚本：
+
+```bash
+node scripts/init-app.mjs \
+  --name "旅行规划助手" \
+  --short-name "旅行助手" \
+  --slug "trip-planner" \
+  --description "使用 AI 快速生成旅行计划" \
+  --theme-color "#863bff"
+pnpm install
+```
+
+**原理：** `scripts/init-app.mjs` 以脚本所在仓库为应用根目录，检查必填参数、`slug` 格式和颜色格式，然后写入根目录的 `app.config.ts`，并将 `package.json` 的包名改为 `slug`、版本改为 `0.1.0`。它不复制文件、不下载模板、不安装依赖，也不创建 Git 仓库。因此必须先复制模板并进入新目录；复制时要排除模板的 `.git/` 和生成文件。
+
+模板通过 `pnpm-workspace.yaml` 将依赖存储在 `~/.pnpm-store`，不同应用可共用包内容。初始化后按[两种方式共同的后续步骤](#两种方式共同的后续步骤)继续。
+
+## 方式二：使用全局命令从 GitHub 创建
+
+先在本地模板仓库执行一次：
+
+```bash
+pnpm link --global
+```
+
+这会根据 `package.json` 的 `bin` 字段，将 `create-pwa-app` 注册为全局命令。它链接当前本地仓库中的命令脚本，但**新应用的模板内容来自 GitHub**。需要远端包含本地模板修改时，先把修改推送到 GitHub。
+
+在应用目录之外运行：
+
+```bash
+create-pwa-app \
+  --name "旅行规划助手" \
+  --short-name "旅行助手" \
+  --slug "trip-planner" \
+  --description "使用 AI 快速生成旅行计划" \
+  --theme-color "#863bff"
+```
+
+默认在当前目录创建 `trip-planner/`。可用 `--dir /path/to/trip-planner` 指定其他位置；目标目录已存在时命令会停止，不会覆盖。运行 `create-pwa-app --help` 可查看所有参数。
+
+**原理：** `bin/create-pwa-app.mjs` 用 `git clone --depth 1` 从 `https://github.com/lxchinesszz/web-pwa-starter.git` 下载远端模板到新目录，移除克隆得到的 `.git/`，然后在新目录调用同一个 `scripts/init-app.mjs`。随后依次运行 `pnpm install`、`pnpm generate:pwa-assets`、`pnpm lint` 和 `pnpm build`。新应用与模板仓库没有 Git 历史关联；如果需要版本控制，可在新目录自行运行 `git init`。
+
+## 两种方式共同的后续步骤
+
+1. 替换 `public/favicon.svg` 为应用自己的图标，再运行 `pnpm generate:pwa-assets`。全局命令虽然已生成图标，但使用的是模板默认图标。
+2. 根据需求修改 `src/App.tsx` 及相关组件。应用元数据统一从根目录 `app.config.ts` 读取。
+3. 运行 `pnpm lint && pnpm build`。全局命令已自动运行一次；修改图标或页面后应重新验证。
+4. 使用 `pnpm dev` 本地检查。只有在明确要求发布时才运行 `pnpm deploy`。
 
 ## AI Agent 约束
 

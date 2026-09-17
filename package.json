@@ -4,6 +4,9 @@
   "version": "0.1.4",
   "packageManager": "pnpm@11.9.0",
   "type": "module",
+  "bin": {
+    "create-pwa-app": "./bin/create-pwa-app.mjs"
+  },
   "scripts": {
     "clean": "node ./scripts/clean.mjs",
     "dev": "vite",
