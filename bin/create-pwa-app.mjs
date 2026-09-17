@@ -5,7 +5,7 @@ import { rm } from 'node:fs/promises'
 import path from 'node:path'
 import { spawnSync } from 'node:child_process'
 
-const templateUrl = 'https://github.com/lxchinesszz/web-pwa-starter.git'
+const templateUrl = 'https://github.com/lxchinesszz/web-pwa-ios-starter.git'
 const valueOptions = new Set([
   'name', 'short-name', 'slug', 'description', 'theme-color',
   'background-color', 'footer-note', 'dir',
