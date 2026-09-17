@@ -1,51 +1,23 @@
+/*
+ * Tailwind and Konsta must be imported from the same stylesheet: Konsta ships
+ * `@theme` colour tokens plus `@source` directives, and Tailwind only registers
+ * those in the file that establishes the Tailwind root. Importing Konsta's
+ * theme from a second stylesheet leaves every Konsta colour utility missing.
+ */
 @import 'tailwindcss';
-
-:root {
-  font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-  color: #0f172a;
-  background: #f8fafc;
-  font-synthesis: none;
-  text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-}
+@import 'konsta/react/theme.css';
 
 html {
-  width: 100%;
-  height: 100%;
-  min-width: 320px;
-  overflow: hidden;
-  overscroll-behavior: none;
-  background: #f8fafc;
+    margin: 0;
+    padding: 0;
 }
 
 body {
-  position: fixed;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  min-width: 320px;
-  margin: 0;
-  overflow: hidden;
-  overscroll-behavior: none;
+    margin: 0;
+    padding: 0;
 }
 
 #root {
-  width: 100%;
-  height: 100%;
-  overflow: hidden;
-  overscroll-behavior: none;
-}
-
-button,
-textarea {
-  font: inherit;
-}
-
-@media (prefers-color-scheme: dark) {
-  :root,
-  html {
-    color: #f8fafc;
-    background: #080b12;
-  }
+    margin: 0;
+    padding: 0;
 }

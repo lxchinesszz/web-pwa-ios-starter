@@ -1,18 +1,8 @@
-import { Button, Toast } from 'konsta/react'
 import { useEffect, useState } from 'react'
 import { useRegisterSW } from 'virtual:pwa-register/react'
 
 const updateCheckInterval = 60 * 60 * 1000
 
-/**
- * Konsta's `Toast` animates on the `opened` prop, so it must stay mounted: the
- * component returns the toast even when no update is pending and only flips
- * `opened`. `aria-hidden` keeps the hidden copy out of the accessibility tree.
- *
- * `bottom-safe-24` lifts the toast over the fixed Tabbar (taller than Konsta's
- * default `bottom-safe-4`); `!` is required because both classes set `bottom`
- * and the winner would otherwise depend on stylesheet order.
- */
 function PwaUpdatePrompt() {
   const [registration, setRegistration] = useState<ServiceWorkerRegistration>()
   const [isUpdating, setIsUpdating] = useState(false)
@@ -47,6 +37,8 @@ function PwaUpdatePrompt() {
     }
   }, [registration])
 
+  if (!needRefresh) return null
+
   const handleUpdate = async () => {
     setIsUpdating(true)
 
@@ -59,24 +51,31 @@ function PwaUpdatePrompt() {
   }
 
   return (
-    <Toast
-      opened={needRefresh}
-      position="center"
-      aria-hidden={!needRefresh}
+    <aside
+      aria-live="polite"
       aria-label="应用更新提示"
-      role="status"
-      className="bottom-safe-24!"
-      button={
-        <Button rounded small inline disabled={isUpdating} onClick={handleUpdate}>
-          {isUpdating ? '更新中…' : '立即更新'}
-        </Button>
-      }
+      className="fixed inset-x-4 bottom-[calc(1.5rem+var(--k-safe-area-bottom))] z-50 mx-auto max-w-md rounded-2xl border border-white/10 bg-slate-950/95 p-4 text-white shadow-2xl shadow-slate-950/30 backdrop-blur-xl"
     >
-      <div className="shrink">
-        <p className="text-sm font-semibold">新版本已准备好</p>
-        <p className="mt-0.5 text-xs opacity-60">更新后页面会自动刷新</p>
+      <div className="flex items-center gap-4">
+        <span className="grid size-10 shrink-0 place-items-center rounded-xl bg-violet-600 text-xl" aria-hidden="true">
+          ↑
+        </span>
+        <div className="min-w-0 flex-1">
+          <p className="text-sm font-bold">新版本已准备好</p>
+          <p className="mt-1 text-xs leading-5 text-slate-300">
+            点击更新以获得最新功能，页面将自动刷新。
+          </p>
+        </div>
+        <button
+          type="button"
+          onClick={handleUpdate}
+          disabled={isUpdating}
+          className="shrink-0 rounded-xl bg-violet-600 px-4 py-2.5 text-xs font-bold text-white transition hover:bg-violet-500 active:scale-95 disabled:cursor-wait disabled:opacity-60"
+        >
+          {isUpdating ? '更新中…' : '立即更新'}
+        </button>
       </div>
-    </Toast>
+    </aside>
   )
 }
 
