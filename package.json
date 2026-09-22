@@ -10,9 +10,10 @@
   "scripts": {
     "clean": "node ./scripts/clean.mjs",
     "dev": "vite",
-    "build": "tsc -b && vite build",
+    "build": "tsc -b && vite build && && pnpm run size:out",
     "generate:pwa-assets": "pwa-assets-generator --preset minimal-2023 public/favicon.svg",
     "init-app": "node ./scripts/init-app.mjs",
+    "size:out": "node scripts/out-size.mjs",
     "lint": "eslint .",
     "preview": "vite preview",
     "version:bump": "pnpm version patch --no-git-tag-version",
