@@ -1,0 +1,4 @@
+interface:
+  display_name: "PWA iOS UI"
+  short_description: "使用真实 React 与 Konsta 组件生成可交互 HTML 效果稿及开发参考源码"
+  default_prompt: "使用 $pwa-ios-ui，按 pwa-ios-developer 的组件约定生成 iOS 风格 HTML 效果稿，并交付 React/Konsta 源码供开发参考。"

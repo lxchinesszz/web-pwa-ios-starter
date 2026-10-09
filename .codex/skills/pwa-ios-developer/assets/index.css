@@ -1,0 +1,21 @@
+/*
+ * Tailwind and Konsta must be imported from the same stylesheet: Konsta ships
+ * `@theme` colour tokens plus `@source` directives, and Tailwind only registers
+ * those in the file that establishes the Tailwind root. Importing Konsta's
+ * theme from a second stylesheet leaves every Konsta colour utility missing.
+ */
+@import 'tailwindcss';
+@import 'konsta/react/theme.css';
+
+html,
+body,
+#root {
+  margin: 0;
+  padding: 0;
+  overscroll-behavior: none;
+}
+
+.k-page {
+  overflow-y: auto;
+  overscroll-behavior-y: none;
+}
