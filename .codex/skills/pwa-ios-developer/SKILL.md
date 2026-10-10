@@ -41,7 +41,7 @@ React + Tailwind CSS + Konsta UI 项目直接引用 [assets/index.css](assets/in
 
 导航采用固定判定：多个彼此平行的一级页面使用 `Tabbar` + `ToolbarPane` + `TabbarLink`；不是平行页面则不设计 Tabbar。具体判定见设计建议，组件结构见组件规范。
 
-顶部导航栏必须使用 `konsta/react` 的 `Navbar`，采用 `className="top-0 sticky"`，不得用自定义 HTML/CSS 模拟导航栏。标题、尺寸、透明效果及操作槽按组件规范配置；已有封装必须以 `Navbar` 为基础。
+顶部导航栏必须使用 `konsta/react` 的 `Navbar`，采用 `className="top-0 sticky"`，滚动时保持吸顶；不得用自定义 HTML/CSS 模拟导航栏。默认保留 Konsta 原生的背景与轻微模糊层，不额外叠加整栏毛玻璃、渐变或自定义背景，不隐藏组件内部的背景/模糊层。页面内容按正常文档流接在 Navbar 下方，不用负边距让首屏卡片伸入导航背后。标题、尺寸及操作槽按组件规范配置；仅当用户明确要求其他顶部视觉时调整默认样式。
 
 1. 明确入口、完成路径、数据变化及验收结果，检查现有实现后确定范围。
 2. 优先复用业务组件和 Konsta 通用交互，必要时组合业务组件；平台语义或能力不足时采用合适的现有组件或语义化 HTML。
