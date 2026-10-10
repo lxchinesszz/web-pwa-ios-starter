@@ -36,16 +36,16 @@
   className="top-0 sticky"
   medium={size === 'Medium'}
   large={size === 'Large'}
-  transparent={isTransparent}
   right={<Link navbar>Right</Link>}
 />
 ```
 
 - `Navbar` 和 `Link` 从 `konsta/react` 导入。示例文案替换为真实标题、副标题和操作名称。
-- `size`、`isTransparent` 表示页面配置，不要求增加设置控件或交互状态。`medium` 与 `large` 互斥，普通尺寸两者均为 false；固定尺寸页面可直接使用对应布尔属性。
+- `size` 表示页面配置，不要求增加设置控件或交互状态。`medium` 与 `large` 互斥，普通尺寸两者均为 false；固定尺寸页面可直接使用对应布尔属性。
 - 无副标题时省略 `subtitle`；无右侧操作时省略 `right`。有操作时给 `Link navbar` 接入真实事件或导航地址，不保留无响应的示例链接。
 - 返回通过 `left` 槽放置 `NavbarBackLink` 并接入项目导航。根页面不为凑齐结构添加返回按钮。
 - 保留 `top-0 sticky`，将导航栏置于适当的页面滚动上下文，检查顶部安全区和滚动层级，避免父级 overflow 或重复内边距破坏吸顶效果。
+- 默认保留 Konsta 生成的导航背景与轻微模糊层，不另设整栏渐变、强模糊或毛玻璃，也不使用 `display:none` 隐藏其背景节点。页面内容按正常流布局在导航下方；仅在用户明确要求透明或内容叠加效果时调整。
 
 ## 平行一级页面的 Tabbar 示例
 
