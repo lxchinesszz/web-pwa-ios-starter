@@ -36,7 +36,8 @@
 ## 顶部导航栏（固定规则）
 
 - 导航栏必须使用 Konsta `Navbar`，固定采用 `className="top-0 sticky"`；不得用普通容器、标题和按钮拼装替代。
-- 使用组件的 `title`、`subtitle`、`medium`、`large`、`transparent` 及左右操作槽表达页面设计，不另造导航栏尺寸体系。
+- 默认使用 Konsta `Navbar` 自带的背景和轻微模糊层，不给整条导航额外加 `backdrop-filter`、半透明渐变或自定义毛玻璃，也不隐藏组件生成的背景层。内容从导航下方开始，不用负边距与导航重叠；用户明确要求特殊顶部设计时按其设计处理。
+- 使用组件的 `title`、`subtitle`、`medium`、`large` 及左右操作槽表达页面设计，不另造导航栏尺寸体系。`transparent` 仅在用户明确要求透明导航时使用。
 - 导航操作使用 `Link navbar`，返回使用 `NavbarBackLink` 接入实际导航；无副标题或右侧操作时省略对应内容。
 - 粘滞定位与页面主滚动容器配合，检查顶部安全区、滚动时的层级和透明背景下的可读性。示例见 [组件规范](konsta-components.md#navbar-固定结构)。
 
